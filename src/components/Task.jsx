@@ -8,6 +8,22 @@ const Task = () => {
 
     // todo*: make this component functional by implementing state management and API calls
 
+const [tasks, setTasks] = React.useState([]);
+const [title, setTitle] = React.useState("");
+const [description, setDescription] = React.useState("");
+const [dueDate, setDueDate] = React.useState("");
+const [personId, setPersonId] = React.useState("");
+
+React.useEffect(() => {
+    fetch("http://localhost:9090/api/todos")
+        .then(res => res.json())
+        .then(data => setTasks(data))
+        .catch(err => console.error("Error loading tasks:", err));
+}, []);
+
+const handleSubmit = (e) => {
+    e.preventDefault();
+
     return (
         <div className="dashboard-layout">
             <Sidebar isOpen={false} onClose={() => {}} />
