@@ -24,6 +24,29 @@ React.useEffect(() => {
 const handleSubmit = (e) => {
     e.preventDefault();
 
+    const newTask = {
+        title,
+        description,
+        dueDate,
+        personId: personId || null
+    };
+
+    fetch("http://localhost:9090/api/todos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTask)
+    })
+        .then(res => res.json())
+        .then(saved => {
+            setTasks([...tasks, saved]);
+            setTitle("");
+            setDescription("");
+            setDueDate("");
+            setPersonId("");
+        })
+        .catch(err => console.error("Error saving task:", err));
+};
+
     return (
         <div className="dashboard-layout">
             <Sidebar isOpen={false} onClose={() => {}} />
