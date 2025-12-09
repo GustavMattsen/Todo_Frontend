@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:9090/api/todo';
 
 export const taskService = {
 
-    // Get all todos
+    // Get all tasks
     getAllTasks: async () => {
         const token = authService.getToken();
         const response = await fetch(API_URL, {
@@ -39,4 +39,29 @@ export const taskService = {
         return response.json();
     },
 
+      // Update a todo
+    updateTask: async (id, task) => {
+        const token = authService.getToken();
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(task)
+        });
+        if (!response.ok) throw new Error('Failed to update task');
+        return response.json();
+    },
+
+    // Delete a todo
+    deleteTask: async (id) => {
+        const token = authService.getToken();
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Failed to delete task');
+        return true;
+    },  
 }
