@@ -1,1 +1,42 @@
-//*todo: implement taskService and call the API
+import { authService } from './authService';
+
+const API_URL = 'http://localhost:9090/api/todo';
+
+export const taskService = {
+
+    // Get all todos
+    getAllTasks: async () => {
+        const token = authService.getToken();
+        const response = await fetch(API_URL, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Failed to fetch tasks');
+        return response.json();
+    },
+
+    // Get a single todo by ID
+    getTaskById: async (id) => {
+        const token = authService.getToken();
+        const response = await fetch(`${API_URL}/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Failed to fetch task');
+        return response.json();
+    },
+
+    // Add a new todo
+    addTask: async (task) => {
+        const token = authService.getToken();
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(task)
+        });
+        if (!response.ok) throw new Error('Failed to add task');
+        return response.json();
+    },
+
+}
