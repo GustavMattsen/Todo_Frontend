@@ -64,4 +64,34 @@ export const taskService = {
         if (!response.ok) throw new Error('Failed to delete task');
         return true;
     },  
-}
+
+       // Get overdue tasks
+    getOverdueTasks: async () => {
+        const token = authService.getToken();
+        const response = await fetch(`${API_URL}/overdue`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Failed to fetch overdue tasks');
+        return response.json();
+    },
+
+    // Get tasks by person
+    getTasksByPerson: async (personId) => {
+        const token = authService.getToken();
+        const response = await fetch(`${API_URL}/person/${personId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Failed to fetch tasks for person');
+        return response.json();
+    },
+
+    // Get tasks by status
+    getTasksByStatus: async (status) => {
+        const token = authService.getToken();
+        const response = await fetch(`${API_URL}/status?status=${status}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Failed to fetch tasks by status');
+        return response.json();
+    }
+};
